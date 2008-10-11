@@ -2,6 +2,7 @@ from Tkinter import *
 import urllib
 import urllib2
 import sgmllib
+import tkMessageBox
 
 class TranstParser(sgmllib.SGMLParser):
     def __init__(self):
@@ -33,20 +34,20 @@ class Application(Frame):
         
     def CreateWidgets(self):
         self.Msg1 = Label( text = 'Input Word to Translate:' )
-        self.Msg1.grid()
+        self.Msg1.grid( row = 0, sticky = W , padx = 5)
         
-        self.InputText = Entry( textvariable = self.input_text )
-        self.InputText.grid()
+        self.InputText = Entry( textvariable = self.input_text, width = 50  )
+        self.InputText.grid( row =2, padx =5 )
         
         self.TranslateButton = Button( text = 'Translate', command = self.Translate)
-        self.TranslateButton.grid()
+        self.TranslateButton.grid( row =3, sticky = E, padx = 5, pady = 5)
         
-        self.OutputText = Entry( textvariable = self.output_text )
-        self.OutputText.grid()
+        self.OutputText = Entry( textvariable = self.output_text, width = 50 )
+        self.OutputText.grid( row=4)
         
         
         self.QuitButton = Button( text = 'Quit', command = self.quit )
-        self.QuitButton.grid()
+        self.QuitButton.grid( row = 5, sticky = E, padx =5, pady =5 )
         
     def Translate(self):
         lin = 'en'
@@ -54,22 +55,26 @@ class Application(Frame):
         #lout = 'en'
         #text = 'flesh'
         text = self.input_text.get()
-        req_data={"hl":"zh-cn","ie":"UTF-8",'text':text,"langpair":"%s|%s" % (lin,lout)}
-        req_url='http://translate.google.cn/translate_t'
         
-        data=urllib.urlencode(req_data)
-        req=urllib2.Request(req_url,data)
-        
-        req.add_header('User-Agent','Mozilla/4.0')
-        data=urllib2.urlopen(req).read()
-        #print data
-        
-        tp=TranstParser()
-        tp.feed(data)
-        
-        for a in tp.results:
-            #print a
-            self.output_text.set(a.decode('gbk','utf-8'))
+        if len(text)>0:
+            req_data={"hl":"zh-cn","ie":"UTF-8",'text':text,"langpair":"%s|%s" % (lin,lout)}
+            req_url='http://translate.google.cn/translate_t'
+            
+            data=urllib.urlencode(req_data)
+            req=urllib2.Request(req_url,data)
+            
+            req.add_header('User-Agent','Mozilla/4.0')
+            data=urllib2.urlopen(req).read()
+            #print data
+            
+            tp=TranstParser()
+            tp.feed(data)
+            
+            for a in tp.results:
+                #print a
+                self.output_text.set(a.decode('gbk','utf-8'))
+        else:
+            tkMessageBox.showwarning("Google Translate","You must input a word to translate!")
         
         
         
