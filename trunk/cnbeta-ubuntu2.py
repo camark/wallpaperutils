@@ -5,7 +5,8 @@ import urllib2
 import os
 import baidublog
 
-url = 'http://www.cnbeta.com/articles/68329.htm'
+article_id = 69031
+url = 'http://www.cnbeta.com/articles/%d.htm' % (article_id)
 url_obj = urllib2.urlopen(url)
 
 if url_obj.code == 200:
@@ -44,12 +45,14 @@ for l in lines:
 
 print title
 
-news_title = '[Ubuntu ÏûÏ¢]'+title
+news_title = title
 
 openoffice_logo = 'http://hiphotos.baidu.com/camark/pic/item/c756a43e9ff6a7e1838b1309.jpg'
 ubuntu_logo = 'http://hiphotos.baidu.com/camark/pic/item/034a49dadb15aac0b7fd48ec.jpg'
+fedora_logo = 'http://hiphotos.baidu.com/camark/pic/item/9575e3eddf89975479f055f3.jpg'
+fullcirlce_logo = 'http://hiphotos.baidu.com/camark/pic/item/1799673e8130222670cf6c80.jpg'
 
-pic_log = openoffice_logo
+pic_log = fullcirlce_logo
 blog_content = '<img src="%s" align="right">' % (pic_log)
 for c in contents[:-1]:
     if not c.find('¸ÐÐ»')<>-1:
@@ -58,8 +61,8 @@ for c in contents[:-1]:
         
 
 bb = baidublog.BaiduBlog()
-username = 'xxxx'
-password = 'xxxx'
-blogname = 'xxxx'
+username = 'superwar3fan'
+password = 'blizzard'
+blogname = 'camark'
 bb.login(username,password)
 bb.publishBlog(blogname,news_title,blog_content,'ubuntu/debian')
